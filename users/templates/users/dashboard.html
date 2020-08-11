@@ -1,0 +1,60 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+    {% include 'users/status.html'%}
+
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-md-5">
+                <h1>CUSTOMERS:</h1>
+                <hr>
+                <div class="card card-body p-2">
+                    <a href="" class="btn btn-primary btn-sm btn-block">Create Customer</a>
+                    <table class="table table-sm">
+                        <tr>
+                            <th></th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                        </tr>
+                        {% for customer in customers %}
+                            <tr>
+                                <td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
+                                <td>{{ customer.name }}</td>
+                                <td>{{ customer.phone}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <h1>LAST 5 ORDERS</h1>
+                <hr>
+                <div class="card card-body p-2">
+                    <a href="" class="btn btn-primary btn-sm btn-block">Create Order</a>
+                    <table class="table table-sm">
+                        <tr>
+                            <th>Product</th>
+                            <th>Date Orderd</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Remove</th>
+                        </tr>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.product.name}}</td>
+                                <td>{{ order.dated_created}}</td>
+                                <td>{{ order.status}}</td>
+                                <td><a class="btn btn-sm btn-info" href="">Update</a></td>
+                                <td><a class="btn btn-sm btn-danger" href="">Remove</a></td>
+                            </tr>
+                        {% endfor %}
+
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
