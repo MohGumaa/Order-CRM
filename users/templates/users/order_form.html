@@ -1,0 +1,22 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+    <div class="mt-2">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {{form}}
+                            <hr>
+                        {% endfor %}
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

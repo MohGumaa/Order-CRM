@@ -7,13 +7,13 @@ class Customer(models.Model):
     dated_created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return f'{self.name} Customer'
+        return self.name
 
 class Tag(models.Model):
     name = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return f'{self.name} Tag'
+        return self.name
 
 
 class Product(models.Model):
@@ -30,7 +30,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag)
 
     def __str__(self):
-        return f'({self.name})'
+        return self.name
 
 class Order(models.Model):
     STATUS = (
@@ -45,4 +45,4 @@ class Order(models.Model):
     dated_created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return f'Order staus: ({self.status})'
+        return self.product.name
