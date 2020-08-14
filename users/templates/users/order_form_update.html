@@ -7,11 +7,7 @@
                 <div class="card card-body">
                     <form method="post">
                         {% csrf_token %}
-                        {{ formset.management_form }}
-                        {% for form in formset %}
-                            {{ form|crispy }}
-                            <hr>
-                        {% endfor %}
+                        {{ form|crispy }}
                         <button class="btn btn-primary">Submit</button>
                     </form>
                 </div>
