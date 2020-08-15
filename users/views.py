@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from .forms import RegisterForm
 from django.forms import inlineformset_factory
 from .models import *
-from .forms import OrderForm
+from .forms import OrderForm, CustomerForm
 from django.contrib import messages
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
@@ -16,11 +16,11 @@ def registerPage(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, f"Your account has been created, Now you can login")
-
             group = Group.objects.get(name='customer')
             user.groups.add(group)
+            Customer.objects.create(user=user)
 
+            messages.success(request, f"Your account has been created, Now you can login")
             return redirect('login')
     else:
         form = RegisterForm()
@@ -30,12 +30,39 @@ def registerPage(request):
     }
     return render(request, 'users/register.html', context)
 
+
+@login_required
+@allowed_users(allowed_roles=['customer'])
 def user_page(request):
-    username = request.user
+    user = request.user
+    orders = user.customer.order_set.all()
+
     context = {
-        "title": f"Account - {str(username).title()}",
+        "title": f"Account - {str(user).title()}",
+        "orders": orders,
+        "total_orders" : orders.count(),
+        "delivered": orders.filter(status='Delivery').count(),
+        "pending": orders.filter(status='Pending').count(),
     }
     return render(request, 'users/user.html', context)
+
+
+@login_required
+@allowed_users(allowed_roles=['customer'])
+def customerSettings(request):
+    form = CustomerForm(instance=request.user.customer)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=request.user.customer)
+        if form.is_valid():
+            form.save()
+            messages.success(request,f"account update")
+            return redirect("account")
+    context = {
+        "title": "Prfile",
+        "form": form
+    }
+    return render(request, 'users/account.html', context)
 
 @login_required
 @admin_only
@@ -52,6 +79,7 @@ def home(request):
         "pending": orders.filter(status='Pending').count(),
     }
     return render(request, 'users/dashboard.html', context)
+
 
 @login_required
 @allowed_users(allowed_roles=['admin'])

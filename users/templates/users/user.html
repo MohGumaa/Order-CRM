@@ -1,6 +1,32 @@
 {% extends "users/base.html" %}
 {% block content %}
     {% include 'users/status.html' %}
-    <h3>userpfogei</h3>
+    <div class="mt-2">
+        <div class="row">
+            <div class="col-md">
+                <div class="card card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <th>Product</th>
+                            <th>Note</th>
+                            <th>Date Orderd</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.product.name }}</td>
+                                <td>{{ order.note }}</td>
+                                <td>{{ order.dated_created }}</td>
+                                <td>{{ order.status }}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
