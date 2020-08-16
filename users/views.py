@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 from .forms import RegisterForm
 from django.forms import inlineformset_factory
 from .models import *
@@ -16,10 +15,6 @@ def registerPage(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            group = Group.objects.get(name='customer')
-            user.groups.add(group)
-            Customer.objects.create(user=user)
-
             messages.success(request, f"Your account has been created, Now you can login")
             return redirect('login')
     else:
